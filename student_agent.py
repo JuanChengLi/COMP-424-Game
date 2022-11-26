@@ -60,13 +60,14 @@ class StudentAgent(Agent):
             # checks all moves u,r,d,l
             # checks all dir for wall
             for move in moves:
+                # next position
+                next_pos = cur_pos + move
+                x, y = next_pos
                 for direction in range(4):
                     # checks if there is wall
                     if chess_board[r, c, direction]:
                         continue
-                    # next position
-                    next_pos = cur_pos + move
-                    x, y = next_pos
+
                     # skip next position if not valid move or already visited
                     if next_pos == adv_pos or tuple(next_pos) in visited:
                         continue
