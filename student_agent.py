@@ -47,15 +47,9 @@ class StudentAgent(Agent):
         state_queue = [(my_pos, 0)]
         # visited keeps track of visited cases
         visited = {tuple(my_pos)}
-
-        # checks valid moves within initial position
+        # all_moves is a list of all moves
         all_moves = []
-        r, c = my_pos
-        for direction in range(4):
-            if chess_board[r, c, direction]:
-                continue
-            else:
-                all_moves.append((r, c, direction))
+
         # iterate till max step is reached
         while cur_step != max_step:
             cur_pos, cur_step = state_queue.pop(0)
@@ -66,18 +60,25 @@ class StudentAgent(Agent):
             # checks all moves u,r,d,l
             # checks all dir for wall
             for direction, move in enumerate(moves):
+                
+                # checks if there is wall
+                blocked = chess_board[cur_pos[0], cur_pos[1], direction]
+                if blocked:
+                    continue
+
                 # next position
                 next_pos = (cur_pos[0] + move[0], cur_pos[1] + move[1])
                 x, y = next_pos
-                if 0 < x < chess_board.shape[0] and 0 < y < chess_board.shape[1]:
-                    # checks if there is wall
-                    if chess_board[x, y, direction]:
-                        continue
-                    # skip next position if not valid move or already visited
-                    if next_pos == adv_pos or tuple(next_pos) in visited:
-                        continue
-                    else:
-                        all_moves.append((x, y, direction))
+
+                # skip next position if not valid move or already visited
+                if next_pos == adv_pos or tuple(next_pos) in visited:
+                    continue
+
+                # check if position is valid
+                in_bound = 0 <= x < chess_board.shape[0] and 0 <= y < chess_board.shape[1]
+
+                if in_bound:
+                    all_moves.append((x, y, direction))
 
                 # update queue and visited positions
                 visited.add(tuple(next_pos))
