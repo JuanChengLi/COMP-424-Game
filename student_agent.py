@@ -31,13 +31,8 @@ class StudentAgent(Agent):
         all_moves = self.findAllMoves(chess_board, my_pos, adv_pos, max_step)
         my_pos = (all_moves[-1][0], all_moves[-1][1])
         dir = all_moves[-1][2]
-        print(all_moves)
-
-
-
-
-
-
+        print('length of all moves')
+        print(sorted(all_moves))
         # dummy return
         return my_pos, dir
 
@@ -66,28 +61,28 @@ class StudentAgent(Agent):
             cur_pos, cur_step = state_queue.pop(0)
             r, c = cur_pos
             # safe break
-            if cur_step == max_step or len(state_queue) == 0:
+            if cur_step == max_step:
                 break
             # checks all moves u,r,d,l
             # checks all dir for wall
-            for move in moves:
+            for direction, move in enumerate(moves):
                 # next position
                 next_pos = (cur_pos[0] + move[0], cur_pos[1] + move[1])
                 x, y = next_pos
-                if x < 0 or x > chess_board.shape[0] or y < 0 or y > chess_board.shape[1]:
-                    for direction in range(4):
-                        # checks if there is wall
-                        if chess_board[x, y, direction]:
-                            continue
+                if 0 < x < chess_board.shape[0] and 0 < y < chess_board.shape[1]:
+                    # checks if there is wall
+                    if chess_board[x, y, direction]:
+                        continue
+                    # skip next position if not valid move or already visited
+                    if next_pos == adv_pos or tuple(next_pos) in visited:
+                        continue
+                    else:
+                        all_moves.append((x, y, direction))
 
-                        # skip next position if not valid move or already visited
-                        if next_pos == adv_pos or tuple(next_pos) in visited:
-                            continue
-                        else:
-                            all_moves.append((x, y, direction))
-                    # update queue and visited positions
-                    visited.add(tuple(next_pos))
-                    state_queue.append((next_pos, cur_step + 1))
+                # update queue and visited positions
+                visited.add(tuple(next_pos))
+                state_queue.append((next_pos, cur_step + 1))
+
         return all_moves
 
     def check_valid_input(self, x, y, dir, x_max, y_max):
