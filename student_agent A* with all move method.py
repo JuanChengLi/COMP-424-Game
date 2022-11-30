@@ -115,7 +115,10 @@ class StudentAgent(Agent):
                 in_bound = 0 <= x < chess_board.shape[0] and 0 <= y < chess_board.shape[1]
 
                 if in_bound:
-                    all_moves.append(((x, y), direction))
+
+                    for dir in range(4):
+                        if not chess_board[x][y][dir]:
+                            all_moves.append(((x, y), dir))       
 
                 # update queue and visited positions
                 visited.add(tuple(next_pos))
