@@ -106,10 +106,6 @@ optional arguments:
 
 ## Game Rules
 
-<p align="center">
-  <img src="Gameboard.png" width="600" height="600">
-</p>
-
 ### Game Setting
 On an *M* x *M* chess board, 2 players are randomly distributed on the board with one player occupying one block.
 
